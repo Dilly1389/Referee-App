@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,63 +153,19 @@
     .timer-display{font-size:2rem;}
     .event-btn{font-size:.82rem;padding:14px 6px;}
   }
-  /* Auth overlay */
-  .auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
-  .auth-box{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:28px 22px;width:100%;max-width:360px;}
-  .auth-box h2{margin:0 0 6px;color:var(--accent);font-size:1.2rem;text-align:center;}
-  .auth-box p{margin:0 0 20px;font-size:.8rem;color:var(--text-dim);text-align:center;}
-  .auth-error{color:var(--danger);font-size:.78rem;margin:8px 0;text-align:center;min-height:18px;}
-  .auth-toggle{background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;width:100%;text-align:center;margin-top:10px;padding:6px;}
-  .user-chip{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--border);border-radius:20px;padding:4px 10px 4px 6px;font-size:.74rem;color:var(--text-dim);cursor:pointer;}
-  .user-chip .avatar{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.7rem;display:flex;align-items:center;justify-content:center;}
-  .role-badge{font-size:.58rem;padding:1px 5px;border-radius:8px;font-weight:700;text-transform:uppercase;}
-  .role-badge.admin{background:var(--accent);color:var(--accent-ink);}
-  .role-badge.evaluator{background:var(--accent-2);color:#fff;}
-  /* Users tab */
-  .user-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;}
-  .user-row .uinfo{flex:1;}
-  .user-row .uname{font-weight:700;font-size:.9rem;}
-  .user-row .uemail{font-size:.74rem;color:var(--text-dim);}
-  .user-row select{width:auto;font-size:.78rem;padding:5px 8px;background:var(--bg);}
 </style>
 </head>
 <body>
 
-<!-- AUTH OVERLAY -->
-<div id="authOverlay" class="auth-overlay">
-  <div class="auth-box">
-    <h2>🏉 Referee Assessment</h2>
-    <p id="authSubtitle">Sign in to your account</p>
-    <div id="authNameRow" style="display:none;">
-      <label>Your Name</label>
-      <input type="text" id="authName" placeholder="Full name">
-    </div>
-    <label>Email</label>
-    <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
-    <label>Password</label>
-    <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
-    <div class="auth-error" id="authError"></div>
-    <button class="primary" id="authSubmitBtn" style="margin-top:4px;">Sign In</button>
-    <button class="auth-toggle" id="authToggleBtn">Don't have an account? Sign Up</button>
-    <button class="auth-toggle" id="authForgotBtn" style="color:var(--text-dim);font-size:.74rem;">Forgot password?</button>
-  </div>
-</div>
+
 
 <header>
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-    <h1 style="margin:0;">🏉 Referee Assessment <span class="badge">INTERNAL</span><span id="connDot" class="conn-dot"></span></h1>
-    <div class="user-chip" id="userChip" onclick="signOut()" title="Sign out">
-      <div class="avatar" id="userAvatar">?</div>
-      <span id="userName" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">...</span>
-      <span class="role-badge" id="userRoleBadge"></span>
-    </div>
-  </div>
+  <h1>🏉 Referee Assessment <span class="badge">INTERNAL</span><span id="connDot" class="conn-dot"></span></h1>
   <nav id="mainNav">
     <button class="tab-btn active" data-tab="notation">Match Notation</button>
     <button class="tab-btn" data-tab="schedule">Schedule</button>
     <button class="tab-btn" data-tab="referees">Referees</button>
     <button class="tab-btn" data-tab="dashboard">Dashboard</button>
-    <button class="tab-btn" data-tab="users" id="usersTabBtn" style="display:none;">Users</button>
   </nav>
 </header>
 
@@ -420,36 +375,11 @@
     </div>
   </section>
 
-  <!-- USERS TAB (admin only) -->
-  <section id="tab-users" class="tab-content" style="display:none;">
-    <div class="panel">
-      <h2>Create Account</h2>
-      <p style="font-size:.8rem;color:var(--text-dim);margin-top:0;">Create a login for a new evaluator or admin. Send them their email and password directly.</p>
-      <label>Name</label>
-      <input type="text" id="newUserName" placeholder="Full name">
-      <label>Email</label>
-      <input type="email" id="newUserEmail" placeholder="email@example.com">
-      <label>Password</label>
-      <input type="password" id="newUserPassword" placeholder="Temporary password (min 6 chars)">
-      <label>Role</label>
-      <select id="newUserRole">
-        <option value="evaluator">Evaluator</option>
-        <option value="admin">Admin</option>
-      </select>
-      <button class="primary" id="createUserBtn" style="margin-top:14px;">Create Account</button>
-    </div>
-    <div class="panel">
-      <h2>All Users</h2>
-      <div id="usersList"><div class="empty">Loading...</div></div>
-    </div>
-  </section>
-
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -467,12 +397,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const auth = firebase.auth();
 const ROOT = "refereeRatings";
 const refereesRef = db.ref(`${ROOT}/referees`);
 const evaluationsRef = db.ref(`${ROOT}/evaluations`);
 const fixturesRef = db.ref(`${ROOT}/fixtures`);
-const usersRef = db.ref(`${ROOT}/users`);
 
 db.ref(".info/connected").on("value", snap => {
   document.getElementById("connDot").classList.toggle("ok", snap.val() === true);
@@ -485,175 +413,9 @@ db.ref(".info/serverTimeOffset").on("value", snap => {
 });
 function serverNow(){ return Date.now() + serverTimeOffset; }
 
-/* ===================== AUTH ===================== */
-let currentUser = null;
-let currentRole = null;
-let isAssessorMode = false;
-
-const urlParams = new URLSearchParams(window.location.search);
-const forceAssessor = urlParams.get("assessor") === "1";
-
-// Auth overlay logic
-let authMode = "login";
-document.getElementById("authToggleBtn").addEventListener("click", () => {
-  authMode = authMode === "login" ? "signup" : "login";
-  document.getElementById("authSubmitBtn").textContent = authMode === "login" ? "Sign In" : "Sign Up";
-  document.getElementById("authToggleBtn").textContent = authMode === "login"
-    ? "Don't have an account? Sign Up" : "Already have an account? Sign In";
-  document.getElementById("authSubtitle").textContent = authMode === "login" ? "Sign in to your account" : "Create your account";
-  document.getElementById("authNameRow").style.display = authMode === "signup" ? "block" : "none";
-  document.getElementById("authError").textContent = "";
-});
-
-document.getElementById("authForgotBtn").addEventListener("click", () => {
-  const email = document.getElementById("authEmail").value.trim();
-  if (!email){ document.getElementById("authError").textContent = "Enter your email first."; return; }
-  auth.sendPasswordResetEmail(email).then(() => {
-    document.getElementById("authError").style.color = "var(--good)";
-    document.getElementById("authError").textContent = "Password reset email sent.";
-  }).catch(err => {
-    document.getElementById("authError").style.color = "var(--danger)";
-    document.getElementById("authError").textContent = err.message;
-  });
-});
-
-document.getElementById("authSubmitBtn").addEventListener("click", async () => {
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-  const name = document.getElementById("authName").value.trim();
-  const errEl = document.getElementById("authError");
-  errEl.textContent = "";
-  errEl.style.color = "var(--danger)";
-  if (!email || !password){ errEl.textContent = "Enter email and password."; return; }
-  document.getElementById("authSubmitBtn").disabled = true;
-  try {
-    if (authMode === "login"){
-      await auth.signInWithEmailAndPassword(email, password);
-    } else {
-      if (!name){ errEl.textContent = "Enter your name."; document.getElementById("authSubmitBtn").disabled = false; return; }
-      const cred = await auth.createUserWithEmailAndPassword(email, password);
-      // First user ever becomes admin; otherwise evaluator
-      const usersSnap = await usersRef.once("value");
-      const role = usersSnap.exists() ? "evaluator" : "admin";
-      await usersRef.child(cred.user.uid).set({name, email, role, createdAt: firebase.database.ServerValue.TIMESTAMP});
-    }
-  } catch(err){
-    errEl.textContent = err.message;
-    document.getElementById("authSubmitBtn").disabled = false;
-  }
-});
-
-auth.onAuthStateChanged(async user => {
-  if (!user){
-    currentUser = null; currentRole = null;
-    document.getElementById("authOverlay").style.display = "flex";
-    document.getElementById("authSubmitBtn").disabled = false;
-    return;
-  }
-  currentUser = user;
-  // Load or create user record
-  const snap = await usersRef.child(user.uid).once("value");
-  if (!snap.exists()){
-    // Account created externally (admin console) — default to evaluator
-    const usersSnap = await usersRef.once("value");
-    const role = usersSnap.exists() ? "evaluator" : "admin";
-    await usersRef.child(user.uid).set({name: user.email, email: user.email, role, createdAt: firebase.database.ServerValue.TIMESTAMP});
-    currentRole = role;
-  } else {
-    currentRole = snap.val().role || "evaluator";
-  }
-  isAssessorMode = forceAssessor || currentRole === "evaluator";
-  document.getElementById("authOverlay").style.display = "none";
-  // Update user chip
-  const displayName = snap.val()?.name || user.email;
-  document.getElementById("userAvatar").textContent = displayName.charAt(0).toUpperCase();
-  document.getElementById("userName").textContent = displayName;
-  const roleBadge = document.getElementById("userRoleBadge");
-  roleBadge.textContent = currentRole;
-  roleBadge.className = `role-badge ${currentRole}`;
-  // Show/hide admin-only UI
-  document.getElementById("usersTabBtn").style.display = currentRole === "admin" ? "" : "none";
-  // Apply assessor mode for evaluators
-  applyAssessorModeUI();
-  // Start Firebase listeners (only after auth)
-  startFirebaseListeners();
-  renderAssessorFixturePicker();
-});
-
-function signOut(){
-  if (!confirm("Sign out?")) return;
-  auth.signOut().then(() => {
-    currentUser = null; currentRole = null;
-    detachLiveMatch();
-    referees = {}; evaluations = {}; fixtures = {};
-    document.getElementById("authEmail").value = "";
-    document.getElementById("authPassword").value = "";
-    document.getElementById("authError").textContent = "";
-  });
-}
-
-/* ===================== USERS MANAGEMENT (admin) ===================== */
-document.getElementById("createUserBtn").addEventListener("click", async () => {
-  if (currentRole !== "admin"){ showToast("Admins only"); return; }
-  const name = document.getElementById("newUserName").value.trim();
-  const email = document.getElementById("newUserEmail").value.trim();
-  const password = document.getElementById("newUserPassword").value;
-  const role = document.getElementById("newUserRole").value;
-  if (!name || !email || !password){ showToast("Fill in all fields"); return; }
-  if (password.length < 6){ showToast("Password must be at least 6 characters"); return; }
-  // Save current admin session
-  const adminUser = auth.currentUser;
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, password);
-    await usersRef.child(cred.user.uid).set({name, email, role, createdAt: firebase.database.ServerValue.TIMESTAMP});
-    // Sign back in as admin
-    await auth.signInWithEmailAndPassword(adminUser.email, "__ADMIN_REAUTH_NEEDED__");
-  } catch(err) {
-    // The new user was created; we just need to re-sign in as admin
-    // Prompt admin to re-authenticate
-    if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential"){
-      showToast(`Account created for ${name}. Please sign in again as admin.`);
-      auth.signOut();
-    } else if (err.code && err.code !== "auth/wrong-password"){
-      showToast("Error: " + err.message); return;
-    }
-  }
-  document.getElementById("newUserName").value = "";
-  document.getElementById("newUserEmail").value = "";
-  document.getElementById("newUserPassword").value = "";
-  showToast(`Account created for ${name} (${role})`);
-  renderUsersList();
-});
-
-function renderUsersList(){
-  if (currentRole !== "admin") return;
-  const list = document.getElementById("usersList");
-  usersRef.once("value").then(snap => {
-    const users = snap.val() || {};
-    const ids = Object.keys(users);
-    if (ids.length === 0){ list.innerHTML = `<div class="empty">No users yet.</div>`; return; }
-    list.innerHTML = ids.map(uid => {
-      const u = users[uid];
-      const isMe = uid === currentUser?.uid;
-      return `<div class="user-row">
-        <div class="uinfo">
-          <div class="uname">${esc(u.name||"")} ${isMe?"<span style='font-size:.65rem;color:var(--text-dim);'>(you)</span>":""}</div>
-          <div class="uemail">${esc(u.email||"")}</div>
-        </div>
-        <select onchange="updateUserRole('${uid}', this.value)" ${isMe?"disabled":""}>
-          <option value="evaluator" ${u.role==="evaluator"?"selected":""}>Evaluator</option>
-          <option value="admin" ${u.role==="admin"?"selected":""}>Admin</option>
-        </select>
-      </div>`;
-    }).join("");
-  });
-}
-
-function updateUserRole(uid, role){
-  usersRef.child(uid).update({role}).then(() => showToast("Role updated"));
-}
-
 /* ===================== ASSESSOR-ONLY MODE ===================== */
+const urlParams = new URLSearchParams(window.location.search);
+const isAssessorMode = urlParams.get("assessor") === "1";
 
 /* ===================== CRITERIA (Alphabetical order) ===================== */
 const CRITERIA = [
@@ -1929,30 +1691,25 @@ function showToast(msg){
 }
 
 /* ===================== FIREBASE LISTENERS ===================== */
-let listenersStarted = false;
-function startFirebaseListeners(){
-  if (listenersStarted) return;
-  listenersStarted = true;
-  refereesRef.on("value", snap => {
-    referees = snap.val() || {};
-    refreshFixRefSelect();
-    if (document.getElementById("refereesListView").style.display !== "none"){
-      refreshRefereeFilterSelects();
-      renderRefereesList();
-    }
-    refreshDashboardFilterSelects();
-    renderDashboard();
-  });
-  evaluationsRef.on("value", snap => {
-    evaluations = snap.val() || {};
-    renderDashboard();
-  });
-  fixturesRef.on("value", snap => {
-    fixtures = snap.val() || {};
-    if (document.getElementById("tab-schedule").style.display !== "none") renderFixtureGroups();
-    if (isAssessorMode) renderAssessorFixturePicker();
-  });
-}
+refereesRef.on("value", snap => {
+  referees = snap.val() || {};
+  refreshFixRefSelect();
+  if (document.getElementById("refereesListView").style.display !== "none"){
+    refreshRefereeFilterSelects();
+    renderRefereesList();
+  }
+  refreshDashboardFilterSelects();
+  renderDashboard();
+});
+evaluationsRef.on("value", snap => {
+  evaluations = snap.val() || {};
+  renderDashboard();
+});
+fixturesRef.on("value", snap => {
+  fixtures = snap.val() || {};
+  if (document.getElementById("tab-schedule").style.display !== "none") renderFixtureGroups();
+  if (isAssessorMode) renderAssessorFixturePicker();
+});
 
 /* ===================== USERS TAB CLICK ===================== */
 document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -1962,16 +1719,12 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 });
 
 /* ===================== INIT ===================== */
-try {
-  buildCriteriaInputs();
-  updateTimerDisplayFromState();
-  setEventButtonsEnabled(false);
-  renderActiveMatchBanner();
-  updateAssessorLink();
-} catch(e) {
-  document.body.innerHTML = `<div style="padding:30px;color:#e2574c;font-family:monospace;font-size:.85rem;white-space:pre-wrap;background:#0f1410;min-height:100vh;">STARTUP ERROR:\n${e.stack||e.message}</div>`;
-}
-// Listeners and UI are started inside auth.onAuthStateChanged
+buildCriteriaInputs();
+updateTimerDisplayFromState();
+setEventButtonsEnabled(false);
+renderActiveMatchBanner();
+applyAssessorModeUI();
+updateAssessorLink();
 </script>
 </body>
 </html>
