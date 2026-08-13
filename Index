@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -450,7 +451,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
 /* ===================== FIREBASE CONFIG ===================== */
@@ -1961,11 +1962,15 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 });
 
 /* ===================== INIT ===================== */
-buildCriteriaInputs();
-updateTimerDisplayFromState();
-setEventButtonsEnabled(false);
-renderActiveMatchBanner();
-updateAssessorLink();
+try {
+  buildCriteriaInputs();
+  updateTimerDisplayFromState();
+  setEventButtonsEnabled(false);
+  renderActiveMatchBanner();
+  updateAssessorLink();
+} catch(e) {
+  document.body.innerHTML = `<div style="padding:30px;color:#e2574c;font-family:monospace;font-size:.85rem;white-space:pre-wrap;background:#0f1410;min-height:100vh;">STARTUP ERROR:\n${e.stack||e.message}</div>`;
+}
 // Listeners and UI are started inside auth.onAuthStateChanged
 </script>
 </body>
